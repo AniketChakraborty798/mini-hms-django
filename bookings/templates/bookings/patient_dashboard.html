@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Patient Dashboard</title>
+</head>
+<body>
+
+<h2>Patient Dashboard</h2>
+
+<a href="/google/login/">Connect Google Calendar</a>
+
+<h3>Available Appointments</h3>
+
+<ul>
+{% for slot in slots %}
+    <li>
+        Dr. {{ slot.doctor.username }} |
+        {{ slot.date }} |
+        {{ slot.start_time }} - {{ slot.end_time }}
+        <a href="{% url 'book-slot' slot.id %}">Book</a>
+    </li>
+{% empty %}
+    <li>No available slots.</li>
+{% endfor %}
+</ul>
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Doctor Dashboard</title>
+</head>
+<body>
+
+<h2>Doctor Dashboard</h2>
+
+<a href="/google/login/">Connect Google Calendar</a>
+
+<form method="post">
+    {% csrf_token %}
+    <label>Date:</label>
+    <input type="date" name="date" required><br><br>
+
+    <label>Start Time:</label>
+    <input type="time" name="start_time" required><br><br>
+
+    <label>End Time:</label>
+    <input type="time" name="end_time" required><br><br>
+
+    <button type="submit">Add Availability</button>
+</form>
+
+<hr>
+
+<h3>Your Availability Slots</h3>
+
+<ul>
+{% for slot in slots %}
+    <li>
+        {{ slot.date }} |
+        {{ slot.start_time }} - {{ slot.end_time }} |
+        Booked: {{ slot.is_booked }}
+    </li>
+{% empty %}
+    <li>No slots added yet.</li>
+{% endfor %}
+</ul>
+
+</body>
+</html>
