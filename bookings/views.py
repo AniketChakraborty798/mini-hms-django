@@ -3,6 +3,9 @@ from django.shortcuts import render, redirect
 from django.db import transaction
 from doctors.models import Availability
 from .models import Booking
+import datetime
+from .google_calendar import create_calendar_event
+from .email_service import send_booking_email
 
 @login_required
 def patient_dashboard(request):
@@ -36,5 +39,45 @@ def book_slot(request, slot_id):
             patient=request.user,
             availability=slot
         )
+
+    # ---------------------------------
+    # BUILD DATETIME OBJECTS
+    # ---------------------------------
+    start_dt = datetime.datetime.combine(slot.date, slot.start_time)
+    end_dt = datetime.datetime.combine(slot.date, slot.end_time)
+
+    # ---------------------------------
+    # GOOGLE CALENDAR EVENTS
+    # ---------------------------------
+    create_calendar_event(
+        request.user,
+        f"Appointment with Dr. {slot.doctor.username}",
+        start_dt,
+        end_dt
+    )
+
+    create_calendar_event(
+        slot.doctor,
+        f"Appointment with {request.user.username}",
+        start_dt,
+        end_dt
+    )
+
+    # ---------------------------------
+    # EMAIL NOTIFICATIONS
+    # ---------------------------------
+    send_booking_email(
+        request.user.email,
+        "Appointment Confirmed",
+        f"Your appointment with Dr. {slot.doctor.username} is confirmed on "
+        f"{slot.date} from {slot.start_time} to {slot.end_time}."
+    )
+
+    send_booking_email(
+        slot.doctor.email,
+        "New Appointment Booked",
+        f"You have a new appointment with {request.user.username} on "
+        f"{slot.date} from {slot.start_time} to {slot.end_time}."
+    )
 
     return redirect('patient-dashboard')

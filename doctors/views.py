@@ -5,7 +5,7 @@ from .models import Availability
 @login_required
 def doctor_dashboard(request):
     if request.user.role != 'doctor':
-        return redirect('/')
+        return redirect('redirect-dashboard')
 
     if request.method == 'POST':
         Availability.objects.create(
@@ -16,7 +16,9 @@ def doctor_dashboard(request):
         )
         return redirect('doctor-dashboard')
 
-    slots = Availability.objects.filter(doctor=request.user).order_by('date', 'start_time')
+    slots = Availability.objects.filter(
+        doctor=request.user
+    ).order_by('date', 'start_time')
 
     return render(request, 'doctors/doctor_dashboard.html', {
         'slots': slots
