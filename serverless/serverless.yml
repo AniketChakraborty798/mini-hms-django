@@ -1,0 +1,16 @@
+service: mini-hms-email-service
+
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: python3.9
+  region: ap-south-1
+
+functions:
+  sendBookingEmail:
+    handler: handler.send_email
+    events:
+      - http:
+          path: send-email
+          method: post
