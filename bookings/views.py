@@ -5,7 +5,9 @@ from doctors.models import Availability
 from .models import Booking
 import datetime
 from .google_calendar import create_calendar_event
-from .email_service import send_booking_email
+import requests
+import json
+
 
 @login_required
 def patient_dashboard(request):
@@ -21,6 +23,7 @@ def patient_dashboard(request):
     })
 
 
+@login_required
 @login_required
 def book_slot(request, slot_id):
     if request.user.role != 'patient':
@@ -40,15 +43,9 @@ def book_slot(request, slot_id):
             availability=slot
         )
 
-    # ---------------------------------
-    # BUILD DATETIME OBJECTS
-    # ---------------------------------
     start_dt = datetime.datetime.combine(slot.date, slot.start_time)
     end_dt = datetime.datetime.combine(slot.date, slot.end_time)
 
-    # ---------------------------------
-    # GOOGLE CALENDAR EVENTS
-    # ---------------------------------
     create_calendar_event(
         request.user,
         f"Appointment with Dr. {slot.doctor.username}",
@@ -63,15 +60,13 @@ def book_slot(request, slot_id):
         end_dt
     )
 
-    # ---------------------------------
-    # EMAIL NOTIFICATIONS
-    # ---------------------------------
-    send_booking_email(
-        request.user.email,
-        "Appointment Confirmed",
-        f"Your appointment with Dr. {slot.doctor.username} is confirmed on "
-        f"{slot.date} from {slot.start_time} to {slot.end_time}."
+    # SERVERLESS EMAIL
+    trigger_serverless_email(
+        patient_email=request.user.email,
+        doctor_email=slot.doctor.email
     )
+
+    return redirect('patient-dashboard')
 
     send_booking_email(
         slot.doctor.email,
@@ -81,3 +76,18 @@ def book_slot(request, slot_id):
     )
 
     return redirect('patient-dashboard')
+def trigger_serverless_email(patient_email, doctor_email):
+    """
+    Calls AWS Lambda (Serverless) to send email
+    """
+    url = "https://example-api.execute-api.aws/send-email"  # mock URL
+
+    payload = {
+        "patient_email": patient_email,
+        "doctor_email": doctor_email
+    }
+
+    try:
+        requests.post(url, json=payload, timeout=2)
+    except Exception as e:
+        print("Serverless email trigger failed:", e)

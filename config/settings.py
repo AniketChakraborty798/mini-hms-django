@@ -1,5 +1,10 @@
 from pathlib import Path
 import os
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 # --------------------------------------------------
 # BASE
@@ -119,3 +124,14 @@ os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 GOOGLE_CLIENT_ID = '509848441164-pclmcqke6q2ol63qajoiqmqoco6tlsd2.apps.googleusercontent.com'
 GOOGLE_CLIENT_SECRET = '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T'
+# =========================
+# Gmail SMTP Configuration
+# =========================
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = 'chakrabortyaniket643@gmail.com'
+EMAIL_HOST_PASSWORD = 'kyqu pivd ngzh mogk'
