@@ -1,15 +1,18 @@
 service: mini-hms-email
 
+frameworkVersion: "3"
+
 provider:
   name: aws
   runtime: python3.9
+  region: ap-south-1
   environment:
-    GMAIL_USER: aniketchakraborty808@gmail.com
-    GMAIL_PASS: your_app_password_here
+    EMAIL_USER: aniketchakraborty808@gmail.com
+    EMAIL_PASS: your_app_password_here
 
 functions:
   sendEmail:
-    handler: handler.handler
+    handler: handler.send_email
     events:
       - http:
           path: send-email
