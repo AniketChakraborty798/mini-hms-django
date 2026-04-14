@@ -42,3 +42,5 @@ python manage.py migrate
 # Run app
 python manage.py runserver
 
+📅 Pending Integrations Note
+Google Calendar API: Due strictly to GCP's robust OAuth2 credentials verification logic, automatic sync into individual desktop calendars remains a structural placeholder inside the .save() Booking models. To finalize: Drop your OAuth credentials inside the config, boot up google-auth-oauthlib, inject the dynamic session user variables across the execution, and build the dictionary payload exactly
