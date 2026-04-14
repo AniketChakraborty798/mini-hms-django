@@ -1,0 +1,23 @@
+service: hms-email-service
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: python3.9
+  region: us-east-1
+
+functions:
+  sendEmail:
+    handler: handler.send_email
+    events:
+      - http:
+          path: email/send
+          method: post
+          cors: true
+
+plugins:
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    httpPort: 4000
