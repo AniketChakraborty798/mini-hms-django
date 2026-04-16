@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card" style="max-width: 600px; margin: 0 auto;">
+    <h2>Book Appointment</h2>
+    <p style="color: var(--text-muted);">Select an available time slot below to confirm your booking.</p>
+
+    {% if availabilities %}
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group mt-2">
+                <label>Select Time Slot</label>
+                <select name="availability_id" required>
+                    <option value="" disabled selected>-- Choose a slot --</option>
+                    {% for a in availabilities %}
+                        <option value="{{ a.id }}">{{ a.date }} : {{ a.start_time }} - {{ a.end_time }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-accent mt-2" style="width: 100%;">Confirm Booking</button>
+        </form>
+    {% else %}
+        <p class="mt-2" style="color: #ef4444;">Sorry, this doctor currently has no available time slots.</p>
+    {% endif %}
+    
+    <div class="mt-2 text-center">
+        <a href="/" style="color: var(--text-muted); text-decoration: none;">&larr; Back to Dashboard</a>
+    </div>
+</div>
+{% endblock %}

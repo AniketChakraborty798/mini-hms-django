@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card mb-2">
+    <h2>Welcome, {{ user.username }}</h2>
+    <p>Find available doctors and book your appointments.</p>
+</div>
+
+<div class="card">
+    <h3>Available Doctors</h3>
+    {% if doctors %}
+    <div class="grid">
+        {% for username, doc_id in doctors %}
+            <div style="border: 1px solid #334155; padding: 1.5rem; border-radius: 0.5rem; background: #0f172a;">
+                <h4>Dr. {{ username }}</h4>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">General Physician</p>
+                <a href="{% url 'book_appointment' doc_id %}" class="btn mt-2" style="display: block; width: 100%;">View Availability</a>
+            </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <p>No doctors currently have available time slots. Please check back later!</p>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h3>Your Appointments</h3>
+    {% if user.bookings.all %}
+    <ul style="list-style: none; padding: 0;">
+        {% for b in user.bookings.all %}
+            <li style="padding: 1rem; border: 1px solid #334155; margin-bottom: 0.5rem; border-radius: 0.5rem; background: #0f172a;">
+                <strong>Dr. {{ b.availability.doctor.username }}</strong>
+                <span style="float: right;">{{ b.availability.date }} at {{ b.availability.start_time }}</span>
+            </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <p>You have no upcoming appointments.</p>
+    {% endif %}
+</div>
+{% endblock %}

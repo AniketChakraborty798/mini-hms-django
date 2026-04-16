@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="container-center">
+    <div class="card" style="width: 100%; max-width: 400px;">
+        <h2 class="text-center">Login to HMS</h2>
+        <form method="post" class="mt-2">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.errors %}
+                <span style="color: #ef4444; font-size: 0.8rem; margin-top: 0.25rem;">{{ field.errors.0 }}</span>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn">Login</button>
+        </form>
+        <p class="text-center mt-2" style="font-size: 0.9rem; color: var(--text-muted);">
+            Don't have an account? <a href="{% url 'register' %}" style="color: var(--primary);">Register</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
