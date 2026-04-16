@@ -1,4 +1,4 @@
-# Mini Hospital Management System (HMS
+# Mini Hospital Management System (HMS)
 
 A streamlined hospital management web application designed for seamless doctor availability management and patient appointment bookings. This repository consists of a Django-powered robust backend with a Serverless Lambda Email Notification system hooked together natively via inter-service HTTP requests.
 
