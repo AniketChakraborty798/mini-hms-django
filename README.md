@@ -11,7 +11,7 @@ A streamlined hospital management web application designed for seamless doctor a
 * **Database Agnostic Base:** While wired sequentially inside Settings.py for `PostgreSQL`, an on-the-fly override defaults to `sqlite3` for local headless plug-and-play behavior preventing initial friction.
 * **Fully Responsive Vanilla Design:** An immersive clean-plate dark theme aesthetics layout.
 
-## 🛠 Tech
+## 🛠 Tech Stack
 
 - **Backend / Frontend Templates:** Django, Django ORM, HTML5
 - **Design:** Modern CSS3 Vanilla
